@@ -1,4 +1,10 @@
-package computerdatabase;
+import simulations.Assesment;
+import simulations.PhonemesPhase1;
+import simulations.HighFrequencyWords;
+import simulations.Phonemes;
+import simulations.Blending;
+import simulations.Segmenting;
+import simulations.ScreeningCheck;
 
 import java.time.Duration;
 import java.util.*;
@@ -11,7 +17,7 @@ import static io.gatling.javaapi.core.CoreDsl.*;
 import static io.gatling.javaapi.http.HttpDsl.*;
 import static io.gatling.javaapi.jdbc.JdbcDsl.*;
 
-public class PhonicsTracker extends Simulation 
+public class PhonicsTracker extends Simulation
 {
     private HttpProtocolBuilder httpProtocol = http
         .baseUrl("https://localhost:44317")
@@ -25,106 +31,22 @@ public class PhonicsTracker extends Simulation
         .acceptLanguageHeader("en-US,en;q=0.7,pl;q=0.3")
         .upgradeInsecureRequestsHeader("1")
         .userAgentHeader("Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/115.0");
-                
-        ChainBuilder openPhonemes_Phase_1 = exec(
-            exec(http("Assesment Subsection - Phonemes Phase 1 - Request 1")
-                .get("/api/lookup/pupil-by-entry/18535?include=false"))
-            .pause(1)
-            .exec(http("Assesment Subsection - Phonemes Phase 1 - Request 2")
-                .get("/api/lookup/all-entries/false"))
-            .pause(1) 
-            .exec(http("Assesment Subsection - Phonemes Phase 1 - Request 3")
-                .get("/api/lookup/all-sets"))
-            .pause(1)
-            .exec(http("Assesment Subsection - Phonemes Phase 1 - Request 4")
-                .get("/api/lookup/phase/10"))
-            .pause(1)
-            .exec(http("Assesment Subsection - Phonemes Phase 1 - Request 5")
-                .get("/api/lookup/terms"))
-            .pause(1)
-        );
-
-        ChainBuilder openPhonemes = exec(
-            exec(http("Assesment Subsection - Phonemes - Request 1")
-                .get("/api/lookup/pupil-by-entry/18535?include=false"))
-            .pause(1)
-            .exec(http("Assesment Subsection - Phonemes - Request 2")
-                .get("/api/lookup/all-entries/false"))
-            .pause(1) 
-            .exec(http("Assesment Subsection - Phonemes - Request 3")
-                .get("/api/lookup/all-sets"))
-            .pause(1)
-            .exec(http("Assesment Subsection - Phonemes - Request 4")
-                .get("/api/lookup/phase/1"))
-            .pause(1)
-            .exec(http("Assesment Subsection - Phonemes - Request 5")
-                .get("/api/lookup/terms"))
-            .pause(1)
-        );
-
-        ChainBuilder openHighFrequencyWords = exec(
-            exec(http("Assesment Subsection - High Frequency Words - Request 1")
-                .get("/api/lookup/all-entries/false"))
-            .pause(1)
-            .exec(http("Assesment Subsection - High Frequency Words - Request 2")
-                .get("/api/lookup/all-sets"))
-            .pause(1) 
-            .exec(http("Assesment Subsection - High Frequency Words - Request 3")
-                .get("/api/lookup/terms"))
-            .pause(1)
-            .exec(http("Assesment Subsection - High Frequency Words - Request 4")
-                .get("/api/lookup/phase/2"))
-            .pause(1)
-        );
-
-        ChainBuilder openBlending = exec(
-            exec(http("Assesment Subsection - Blending - Request 1")
-                .get("/api/lookup/phase/4"))
-            .pause(1)
-        );
-
-        ChainBuilder openSegmenting = exec(
-            exec(http("Assesment Subsection - Segmenting - Request 1")
-                .get("/api/lookup/all-entries/false"))
-            .pause(1)
-            .exec(http("Assesment Subsection - Segmenting - Request 2")
-                .get("/api/lookup/all-sets"))
-            .pause(1)
-             .exec(http("Assesment Subsection - Segmenting - Request 3")
-                .get("/api/lookup/terms"))
-            .pause(1)
-            .exec(http("Assesment Subsection - Segmenting - Request 4")
-                .get("/api/lookup/phase/5"))
-            .pause(1)
-        );
-
-        ChainBuilder openScreeningCheck = exec(
-            exec(http("Assesment Subsection - Screening Check - Request 1")
-                .get("/api/lookup/phase/3"))
-            .pause(1)   
-        );
-
-        ChainBuilder openLetterNames = exec(
-            exec(http("Assesment Subsection - Letter Names - Request 1")
-                .get("/api/lookup/phase/8"))
-            .pause(1)   
-        );
 
         ScenarioBuilder firstScenario = scenario("Assesment")
-            .exec(openPhonemes_Phase_1
-                ,openPhonemes
-                ,openHighFrequencyWords
-                ,openBlending
-                ,openSegmenting
-                ,openScreeningCheck
-                ,openLetterNames
+            .exec(PhonemesPhase1.openPhonemes_Phase_1
+                ,Phonemes.openPhonemes
+                ,HighFrequencyWords.openHighFrequencyWords
+                ,Blending.openBlending
+                ,Segmenting.openSegmenting
+                ,ScreeningCheck.openScreeningCheck
+                ,Assesment.openLetterNames
             );
 
         {
             setUp(
                 firstScenario.injectOpen(
-                    //atOnceUsers(1))
-                    rampUsers(300).during(30))
+                    atOnceUsers(1))
+                    //rampUsers(3).during(3))
             ).protocols(httpProtocol);
         }
 }
