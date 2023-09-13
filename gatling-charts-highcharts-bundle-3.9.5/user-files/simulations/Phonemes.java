@@ -48,6 +48,16 @@ public class Phonemes {
         .pause(1)
     );
 
+    public static ChainBuilder performTest = exec(
+        exec(http("Assesment Subsection - Phonemes - Perform test - Request 1")
+            .post("/api/assessment/correct")
+                .body(ElFileBody("CorrectAnswer.json")))
+        .pause(1)
+        // .exec(http("Assesment Subsection - Phonemes - Perform test - Request 2")
+        //     .get("/api/assessment/incorrect"))
+        // .pause(1)
+    );
+
     public static ChainBuilder feedPupilIds = exec(
         feed(
             jdbcFeeder(
