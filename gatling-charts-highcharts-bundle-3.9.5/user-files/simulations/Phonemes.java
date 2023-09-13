@@ -49,13 +49,27 @@ public class Phonemes {
     );
 
     public static ChainBuilder performTest = exec(
-        exec(http("Assesment Subsection - Phonemes - Perform test - Request 1")
+        exec(session ->
+                session.set("questionId", "1"))
+        .exec(http("Assesment Subsection - Phonemes - Perform test - Request 1")
             .post("/api/assessment/correct")
+                .header("content-type", "application/json")
                 .body(ElFileBody("user-files\\simulations\\bodies\\Phonemes\\CorrectAnswer.json")))
+        .exec(session ->
+                { Session nn = session.set("questionId", session.getInt("questionId") + 1);
+                return nn; })//Because questionId = 2 does NOT exist
         .pause(1)
-        // .exec(http("Assesment Subsection - Phonemes - Perform test - Request 2")
-        //     .get("/api/assessment/incorrect"))
-        // .pause(1)
+        .repeat(22)
+        .on(
+            exec(session ->
+                { Session nn = session.set("questionId", session.getInt("questionId") + 1);
+                return nn; })
+            .exec(http("Assesment Subsection - Phonemes - Perform test - Request 1")
+                .post("/api/assessment/correct")
+                    .header("content-type", "application/json")
+                    .body(ElFileBody("user-files\\simulations\\bodies\\Phonemes\\CorrectAnswer.json")))
+            .pause(1)
+        )
     );
 
     public static ChainBuilder feedPupilIds = exec(
