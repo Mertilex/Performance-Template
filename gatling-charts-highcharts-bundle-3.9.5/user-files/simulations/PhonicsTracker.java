@@ -45,18 +45,15 @@ public class PhonicsTracker extends Simulation
         ScenarioBuilder assesmentPage_Phonemes_Test = scenario("Assesment Page - Phonemes - Test")
             
             .exec(
-                feed(
-                jdbcFeeder(
-                    "jdbc:sqlserver://localhost;Database=PhonicsTrackerAzure_Test;Trusted_Connection=True;MultipleActiveResultSets=true;Encrypt=false"
-                    ,"QSuser"
-                    ,"QSuser"
-                    ,"select Id from Pupil"))
-                ,Phonemes.openPhonemes);
+                Phonemes.feedPupilIds
+                ,Phonemes.prepareTest
+                //,Phonemes.openPhonemes
+                );
 
         {
             setUp(
                 assesmentPage_Phonemes_Test.injectOpen(
-                    atOnceUsers(1))
+                    atOnceUsers(2))
                     //rampUsers(3).during(3))
             ).protocols(httpProtocol);
         }
