@@ -46,9 +46,9 @@ public class PhonicsTracker extends Simulation
             
             .exec(
                 Phonemes.feedPupilIds
-                ,Phonemes.openPhonemes
-                ,Phonemes.prepareTest
-                ,Phonemes.beginTest
+                // ,Phonemes.openPhonemes
+                // ,Phonemes.prepareTest
+                // ,Phonemes.beginTest
                 ,Phonemes.performTest
                 //
                 );
