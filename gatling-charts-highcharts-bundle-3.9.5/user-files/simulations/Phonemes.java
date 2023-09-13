@@ -29,24 +29,23 @@ public class Phonemes {
 
     public static ChainBuilder prepareTest = exec(
         exec(http("Assesment Subsection - Phonemes - Prepare test - Request 1")
-            .get("/api/assessment/has-paused-assessment?pupilId=${pupilId}&phaseId=1&categoryId=1&testFormat=all"))
+            .get("/api/assessment/has-paused-assessment?pupilId=#{pupilId}&phaseId=1&categoryId=1&testFormat=all"))
         .pause(1)
-        // .exec(http("Assesment Subsection - Phonemes - Prepare test - Request 1")
-        //     .get(""))
-        // .pause(1)
-        // .exec(http("Assesment Subsection - Phonemes - Prepare test - Request 1")
-        //     .get(""))
-        // .pause(1)
-        // .exec(http("Assesment Subsection - Phonemes - Prepare test - Request 1")
-        //     .get(""))
-        // .pause(1)
-        // .exec(http("Assesment Subsection - Phonemes - Prepare test - Request 1")
-        //     .get(""))
-        // .pause(1)
-        // .exec(http("Assesment Subsection - Phonemes - Prepare test - Request 1")
-        //     .get(""))
-        // .pause(1)
-        
+        .exec(http("Assesment Subsection - Phonemes - Prepare test - Request 2")
+            .get("/api/comments/by-phase?pupilId=#{pupilId}&phaseId=1"))
+        .pause(1)
+        .exec(http("Assesment Subsection - Phonemes - Prepare test - Request 3")
+            .get("/api/assessment/has-paused-assessment?pupilId=#{pupilId}&phaseId=1&categoryId=1&testFormat=all"))
+        .pause(1)        
+    );
+
+    public static ChainBuilder beginTest = exec(
+        exec(http("Assesment Subsection - Phonemes - Begin test - Request 1")
+            .get("/api/assessment/all?phaseId=1&categoryId=1"))
+        .pause(1)
+        .exec(http("Assesment Subsection - Phonemes - Begin test - Request 2")
+            .get("/api/comments/by-phase?pupilId=#{pupilId}&phaseId=1"))
+        .pause(1)
     );
 
     public static ChainBuilder feedPupilIds = exec(

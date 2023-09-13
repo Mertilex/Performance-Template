@@ -46,14 +46,16 @@ public class PhonicsTracker extends Simulation
             
             .exec(
                 Phonemes.feedPupilIds
+                ,Phonemes.openPhonemes
                 ,Phonemes.prepareTest
-                //,Phonemes.openPhonemes
+                ,Phonemes.beginTest
+                //
                 );
 
         {
             setUp(
                 assesmentPage_Phonemes_Test.injectOpen(
-                    atOnceUsers(2))
+                    atOnceUsers(1))
                     //rampUsers(3).during(3))
             ).protocols(httpProtocol);
         }
