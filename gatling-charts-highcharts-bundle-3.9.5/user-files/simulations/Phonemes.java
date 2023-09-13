@@ -64,12 +64,18 @@ public class Phonemes {
             exec(session ->
                 { Session nn = session.set("questionId", session.getInt("questionId") + 1);
                 return nn; })
-            .exec(http("Assesment Subsection - Phonemes - Perform test - Request 1")
+            .exec(http("Assesment Subsection - Phonemes - Perform test - Request 1") //#{questionId}")
                 .post("/api/assessment/correct")
                     .header("content-type", "application/json")
                     .body(ElFileBody("user-files\\simulations\\bodies\\Phonemes\\CorrectAnswer.json")))
             .pause(1)
         )
+    );
+
+    public static ChainBuilder endTest = exec(
+        exec(http("Assesment Subsection - Phonemes - End test - Request 1")
+            .get("/api/assessment/has-paused-assessment?pupilId=#{pupilId}&phaseId=1&categoryId=1&testFormat=all"))
+        .pause(1)
     );
 
     public static ChainBuilder feedPupilIds = exec(

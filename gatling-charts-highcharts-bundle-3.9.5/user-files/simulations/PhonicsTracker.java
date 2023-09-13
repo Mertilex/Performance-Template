@@ -50,14 +50,15 @@ public class PhonicsTracker extends Simulation
                 ,Phonemes.prepareTest
                 ,Phonemes.beginTest
                 ,Phonemes.performTest
+                ,Phonemes.endTest
                 //
                 );
 
         {
             setUp(
                 assesmentPage_Phonemes_Test.injectOpen(
-                    atOnceUsers(1))
-                    //rampUsers(3).during(3))
+                    //atOnceUsers(300))
+                    rampUsers(300).during(60))
             ).protocols(httpProtocol);
         }
 }
