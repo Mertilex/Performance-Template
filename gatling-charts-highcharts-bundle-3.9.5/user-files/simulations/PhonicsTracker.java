@@ -1,4 +1,4 @@
-import simulations.Assesment;
+import simulations.LetterNames;
 import simulations.PhonemesPhase1;
 import simulations.HighFrequencyWords;
 import simulations.Phonemes;
@@ -39,7 +39,7 @@ public class PhonicsTracker extends Simulation
                 ,Blending.openBlending
                 ,Segmenting.openSegmenting
                 ,ScreeningCheck.openScreeningCheck
-                ,Assesment.openLetterNames
+                ,LetterNames.openLetterNames
             );
         
         ScenarioBuilder assesmentPage_Phonemes_Test = scenario("Assesment Page - Phonemes - Test")
@@ -57,8 +57,8 @@ public class PhonicsTracker extends Simulation
         {
             setUp(
                 assesmentPage_Phonemes_Test.injectOpen(
-                    //atOnceUsers(300))
-                    rampUsers(300).during(60))
+                    atOnceUsers(1))
+                    //rampUsers(300).during(60))
             ).protocols(httpProtocol);
         }
 }

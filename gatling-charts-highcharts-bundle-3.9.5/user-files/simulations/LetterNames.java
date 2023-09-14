@@ -8,7 +8,7 @@ import static io.gatling.javaapi.core.CoreDsl.*;
 import static io.gatling.javaapi.http.HttpDsl.*;
 import static io.gatling.javaapi.jdbc.JdbcDsl.*;
 
-public class Assesment {
+public class LetterNames {
     public static ChainBuilder openLetterNames = exec(
             exec(http("Assesment Subsection - Letter Names - Request 1")
                 .get("/api/lookup/phase/8")
