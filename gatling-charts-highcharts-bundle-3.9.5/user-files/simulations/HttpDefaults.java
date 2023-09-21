@@ -1,26 +1,35 @@
-// package HttpDefaults;
+package simulations;
 
-// import java.time.Duration;
-// import java.util.*;
+import java.time.Duration;
+import java.util.*;
 
-// import io.gatling.javaapi.core.*;
-// import io.gatling.javaapi.http.*;
-// import io.gatling.javaapi.jdbc.*;
+import io.gatling.javaapi.core.*;
+import io.gatling.javaapi.http.*;
+import io.gatling.javaapi.jdbc.*;
 
-// import static io.gatling.javaapi.core.CoreDsl.*;
-// import static io.gatling.javaapi.http.HttpDsl.*;
-// import static io.gatling.javaapi.jdbc.JdbcDsl.*;
+import static io.gatling.javaapi.core.CoreDsl.*;
+import static io.gatling.javaapi.http.HttpDsl.*;
+import static io.gatling.javaapi.jdbc.JdbcDsl.*;
 
-// import java.util.regex.{Matcher, Pattern}
-// import java.util.{Base64, Date}
+public class HttpDefaults extends Simulation {
 
-// import common.CommonConfig._
-// import io.gatling.core.Predef._
-// import io.gatling.core.session.Expression
-// import io.gatling.http.Predef._
-// import io.gatling.http.request.builder.HttpRequestBuilder
+    private static FeederBuilder<String> feeder = csv("accessTokens.csv").random();
 
-// public class HttpDefaults extends simulation {
+    public static ChainBuilder feedAccessTokens = exec(
+        feed(feeder)
+    ); 
+
+    public static HttpProtocolBuilder httpProtocol = http
+        .baseUrl("https://localhost:44317")
+        .inferHtmlResources(
+            AllowList(),
+            DenyList(".*\\.js", ".*\\.css", ".*\\.gif", ".*\\.jpeg", ".*\\.jpg", ".*\\.ico", ".*\\.woff", ".*\\.woff2", ".*\\.(t|o)tf", ".*\\.png", ".*\\.svg", ".*detectportal\\.firefox\\.com.*"))
+        .acceptHeader("text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8")
+        .authorizationHeader("Bearer #{accessToken}")
+        .acceptEncodingHeader("gzip, deflate")
+        .acceptLanguageHeader("en-US,en;q=0.7,pl;q=0.3")
+        .upgradeInsecureRequestsHeader("1")
+        .userAgentHeader("Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/115.0");
 
 //   private HttpProtocolBuilder httpProtocol = http
 //         .baseUrl("https://localhost:44317")
@@ -45,4 +54,4 @@
 //     public static ChainBuilder feedAccessTokens = exec(
 //       feed(feeder)
 //   );  
-// }
+}
