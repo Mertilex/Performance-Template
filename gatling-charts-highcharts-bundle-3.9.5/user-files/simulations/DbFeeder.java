@@ -13,29 +13,19 @@ public class DbFeeder extends Simulation {
     private static String dbLogin = "QSuser";
     private static String dbPassword = "QSuser";
 
-    public static ChainBuilder feedPupilIds = exec(
-         feed(
-            jdbcFeeder(
+    private static FeederBuilder fetchData(String sql) {
+        return jdbcFeeder(
                 dbConnectionString
                 ,dbLogin
                 ,dbPassword
-                ,"SELECT p.Id AS pupilId \r\n" + //
+                ,sql).circular().random();
+    }
+    
+    public static ChainBuilder feedPupilIds = exec(
+         feed(
+            fetchData("SELECT p.Id AS pupilId \r\n" + //
                         "FROM dbo.Pupil AS p\r\n" + //
                         "WHERE p.Active = 1\r\n" + //
-                        "AND p.EntryId = 18534").circular().random())
+                        "AND p.EntryId = 18534"))
     );
-
-
-
-    // private static ChainBuilder feedData(String sql) = exec(
-    //     feed(
-    //         jdbcFeeder(
-    //             dbConnectionString
-    //             ,dbLogin
-    //             ,dbPassword
-    //             ,"SELECT p.Id AS pupilId \r\n" + //
-    //                     "FROM dbo.Pupil AS p\r\n" + //
-    //                     "WHERE p.Active = 1\r\n" + //
-    //                     "AND p.EntryId = 18534").circular().random())
-    // );
 }

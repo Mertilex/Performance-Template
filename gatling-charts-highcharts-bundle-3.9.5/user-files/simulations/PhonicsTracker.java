@@ -35,17 +35,17 @@ public class PhonicsTracker extends Simulation
             HttpDefaults.feedAccessTokens
             ,Phonemes.feedPupilIds
             ,Phonemes.openPhonemes
-            ,Phonemes.prepareTest
-            ,Phonemes.beginTest
-            ,Phonemes.performTest
-            ,Phonemes.endTest
+            // ,Phonemes.prepareTest
+            // ,Phonemes.beginTest
+            // ,Phonemes.performTest
+            // ,Phonemes.endTest
             );
 
     {
         setUp(
             assesmentPage_Phonemes_Test.injectOpen(
-                // atOnceUsers(10))
-                rampUsers(500).during(60))
+                atOnceUsers(10))
+                // rampUsers(500).during(60))
         ).protocols(HttpDefaults.httpProtocol);
     }
 }
