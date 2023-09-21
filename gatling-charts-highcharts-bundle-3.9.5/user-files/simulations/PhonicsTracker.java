@@ -20,36 +20,32 @@ import static io.gatling.javaapi.jdbc.JdbcDsl.*;
 
 public class PhonicsTracker extends Simulation
 {
+    ScenarioBuilder firstScenario = scenario("Assesment")
+        .exec(PhonemesPhase1.openPhonemes_Phase_1
+            ,Phonemes.openPhonemes
+            ,HighFrequencyWords.openHighFrequencyWords
+            ,Blending.openBlending
+            ,Segmenting.openSegmenting
+            ,ScreeningCheck.openScreeningCheck
+            ,LetterNames.openLetterNames
+        );
     
-
-         
-
-        ScenarioBuilder firstScenario = scenario("Assesment")
-            .exec(PhonemesPhase1.openPhonemes_Phase_1
-                ,Phonemes.openPhonemes
-                ,HighFrequencyWords.openHighFrequencyWords
-                ,Blending.openBlending
-                ,Segmenting.openSegmenting
-                ,ScreeningCheck.openScreeningCheck
-                ,LetterNames.openLetterNames
+    ScenarioBuilder assesmentPage_Phonemes_Test = scenario("Assesment Page - Phonemes - Test")
+        .exec(
+            HttpDefaults.feedAccessTokens
+            ,Phonemes.feedPupilIds
+            ,Phonemes.openPhonemes
+            ,Phonemes.prepareTest
+            ,Phonemes.beginTest
+            ,Phonemes.performTest
+            ,Phonemes.endTest
             );
-        
-        ScenarioBuilder assesmentPage_Phonemes_Test = scenario("Assesment Page - Phonemes - Test")
-            .exec(
-                HttpDefaults.feedAccessTokens
-                ,Phonemes.feedPupilIds
-                ,Phonemes.openPhonemes
-                ,Phonemes.prepareTest
-                ,Phonemes.beginTest
-                ,Phonemes.performTest
-                ,Phonemes.endTest
-                );
 
-        {
-            setUp(
-                assesmentPage_Phonemes_Test.injectOpen(
-                    // atOnceUsers(10))
-                    rampUsers(500).during(60))
-            ).protocols(HttpDefaults.httpProtocol);
-        }
+    {
+        setUp(
+            assesmentPage_Phonemes_Test.injectOpen(
+                // atOnceUsers(10))
+                rampUsers(500).during(60))
+        ).protocols(HttpDefaults.httpProtocol);
+    }
 }
