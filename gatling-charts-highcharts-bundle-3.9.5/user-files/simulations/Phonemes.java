@@ -8,6 +8,8 @@ import static io.gatling.javaapi.core.CoreDsl.*;
 import static io.gatling.javaapi.http.HttpDsl.*;
 import static io.gatling.javaapi.jdbc.JdbcDsl.*;
 
+import simulations.DbFeeder;
+
 public class Phonemes {
     public static ChainBuilder openPhonemes = exec(
         exec(http("Assesment Subsection - Phonemes - Request 1")
@@ -79,15 +81,7 @@ public class Phonemes {
     );
 
     public static ChainBuilder feedPupilIds = exec(
-        feed(
-            jdbcFeeder(
-                "jdbc:sqlserver://localhost;Database=PhonicsTrackerAzure_Test;Trusted_Connection=True;MultipleActiveResultSets=true;Encrypt=false"
-                ,"QSuser"
-                ,"QSuser"
-                ,"SELECT p.Id AS pupilId \r\n" + //
-                        "FROM dbo.Pupil AS p\r\n" + //
-                        "WHERE p.Active = 1\r\n" + //
-                        "AND p.EntryId = 18534").circular().random())
+        DbFeeder.feedPupilIds
     );  
 }
 
