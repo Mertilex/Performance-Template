@@ -1,10 +1,10 @@
-import simulations.LetterNames;
-import simulations.PhonemesPhase1;
-import simulations.HighFrequencyWords;
-import simulations.Phonemes;
-import simulations.Blending;
-import simulations.Segmenting;
-import simulations.ScreeningCheck;
+import simulations.Pages.Assesment.Phonemes;
+import simulations.Pages.Assesment.PhonemesPhase1;
+import simulations.Pages.Assesment.HighFrequencyWords;
+import simulations.Pages.Assesment.Blending;
+import simulations.Pages.Assesment.Segmenting;
+import simulations.Pages.Assesment.ScreeningCheck;
+import simulations.Pages.Assesment.LetterNames;
 import simulations.HttpDefaults;
 
 import java.time.Duration;
@@ -20,8 +20,10 @@ import static io.gatling.javaapi.jdbc.JdbcDsl.*;
 
 public class PhonicsTracker extends Simulation
 {
-    ScenarioBuilder firstScenario = scenario("Assesment")
-        .exec(PhonemesPhase1.openPhonemes_Phase_1
+    ScenarioBuilder assesment_OpenAllPages = scenario("Assesment - Open all Pages")
+        .exec(
+            HttpDefaults.feedAccessTokens    
+            ,PhonemesPhase1.openPhonemes_Phase_1
             ,Phonemes.openPhonemes
             ,HighFrequencyWords.openHighFrequencyWords
             ,Blending.openBlending
@@ -30,21 +32,23 @@ public class PhonicsTracker extends Simulation
             ,LetterNames.openLetterNames
         );
     
-    ScenarioBuilder assesmentPage_Phonemes_Test = scenario("Assesment Page - Phonemes - Test")
+    ScenarioBuilder assesmentPage_Phonemes_PerformTest = scenario("Assesment Page - Phonemes - Perform Test")
         .exec(
             HttpDefaults.feedAccessTokens
             ,Phonemes.feedPupilIds
             ,Phonemes.openPhonemes
-            // ,Phonemes.prepareTest
-            // ,Phonemes.beginTest
-            // ,Phonemes.performTest
-            // ,Phonemes.endTest
+            ,Phonemes.prepareTest
+            ,Phonemes.beginTest
+            ,Phonemes.performTest
+            ,Phonemes.endTest
             );
 
     {
         setUp(
-            assesmentPage_Phonemes_Test.injectOpen(
-                atOnceUsers(10))
+            assesmentPage_Phonemes_PerformTest.injectOpen(
+                atOnceUsers(1)),
+            assesment_OpenAllPages.injectOpen(
+                atOnceUsers(1))
                 // rampUsers(500).during(60))
         ).protocols(HttpDefaults.httpProtocol);
     }

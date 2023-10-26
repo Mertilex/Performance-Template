@@ -1,4 +1,4 @@
-package simulations;
+package simulations.Pages.Assesment;
 
 import io.gatling.javaapi.core.*;
 import io.gatling.javaapi.http.*;
@@ -8,11 +8,11 @@ import static io.gatling.javaapi.core.CoreDsl.*;
 import static io.gatling.javaapi.http.HttpDsl.*;
 import static io.gatling.javaapi.jdbc.JdbcDsl.*;
 
-public class ScreeningCheck {
-    public static ChainBuilder openScreeningCheck = exec(
-        exec(http("Assesment Subsection - Screening Check - Request 1")
-            .get("/api/lookup/phase/3"))
+public class Blending {
+    public static ChainBuilder openBlending = exec(
+        exec(http("Assesment Subsection - Blending - Request 1")
+            .get("/api/lookup/phase/4"))
         .pause(1)
-    );
+    ); 
 }
 
