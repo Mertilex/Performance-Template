@@ -1,5 +1,7 @@
 package computerdatabase;
 
+import simulations.Configs.GlobalConfig;
+
 import static io.gatling.javaapi.core.CoreDsl.*;
 import static io.gatling.javaapi.http.HttpDsl.*;
 
@@ -30,8 +32,8 @@ public class ComputerDatabaseSimulation extends Simulation {
     FeederBuilder<String> feeder = csv("search.csv").random();
 
     ChainBuilder search =
-        exec(http("Home").get("/"))
-            .pause(1)
+    exec(http("Home").get("/"))
+    .pause(GlobalConfig.scenarioPauses)
             .feed(feeder)
             .exec(
                 http("Search")
@@ -40,13 +42,13 @@ public class ComputerDatabaseSimulation extends Simulation {
                         css("a:contains('#{searchComputerName}')", "href").saveAs("computerUrl")
                     )
             )
-            .pause(1)
+            .pause(GlobalConfig.scenarioPauses)
             .exec(
                 http("Select")
                     .get("#{computerUrl}")
                     .check(status().is(200))
             )
-            .pause(1);
+            .pause(GlobalConfig.scenarioPauses);
 
     // Repeat is a loop resolved at RUNTIME
     ChainBuilder browse =
@@ -55,7 +57,7 @@ public class ComputerDatabaseSimulation extends Simulation {
             exec(
                 http("Page #{i}")
                     .get("/computers?p=#{i}")
-            ).pause(1)
+            ).pause(GlobalConfig.scenarioPauses)
         );
 
     // Note we should be using a feeder here
@@ -69,7 +71,7 @@ public class ComputerDatabaseSimulation extends Simulation {
                     http("Form")
                         .get("/computers/new")
                 )
-                    .pause(1)
+                    .pause(GlobalConfig.scenarioPauses)
                     .exec(
                         http("Post")
                             .post("/computers")

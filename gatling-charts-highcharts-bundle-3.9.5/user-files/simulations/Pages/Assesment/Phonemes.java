@@ -1,4 +1,6 @@
 package simulations.Pages.Assesment;
+
+import simulations.Configs.GlobalConfig;
 import simulations.Feeders.DbFeeder;
 
 import io.gatling.javaapi.core.*;
@@ -13,40 +15,40 @@ public class Phonemes {
     public static ChainBuilder openPhonemes = exec(
         exec(http("Assesment Subsection - Phonemes - Request 1")
             .get("/api/lookup/pupil-by-entry/18535?include=false"))
-        .pause(1)
+        .pause(GlobalConfig.scenarioPauses)
         .exec(http("Assesment Subsection - Phonemes - Request 2")
             .get("/api/lookup/all-entries/false"))
-        .pause(1) 
+        .pause(GlobalConfig.scenarioPauses) 
         .exec(http("Assesment Subsection - Phonemes - Request 3")
             .get("/api/lookup/all-sets"))
-        .pause(1)
+        .pause(GlobalConfig.scenarioPauses)
         .exec(http("Assesment Subsection - Phonemes - Request 4")
             .get("/api/lookup/phase/1"))
-        .pause(1)
+        .pause(GlobalConfig.scenarioPauses)
         .exec(http("Assesment Subsection - Phonemes - Request 5")
             .get("/api/lookup/terms"))
-        .pause(1)
+        .pause(GlobalConfig.scenarioPauses)
     );
 
     public static ChainBuilder prepareTest = exec(
         exec(http("Assesment Subsection - Phonemes - Prepare test - Request 1")
             .get("/api/assessment/has-paused-assessment?pupilId=#{pupilId}&phaseId=1&categoryId=1&testFormat=all"))
-        .pause(1)
+        .pause(GlobalConfig.scenarioPauses)
         .exec(http("Assesment Subsection - Phonemes - Prepare test - Request 2")
             .get("/api/comments/by-phase?pupilId=#{pupilId}&phaseId=1"))
-        .pause(1)
+        .pause(GlobalConfig.scenarioPauses)
         .exec(http("Assesment Subsection - Phonemes - Prepare test - Request 3")
             .get("/api/assessment/has-paused-assessment?pupilId=#{pupilId}&phaseId=1&categoryId=1&testFormat=all"))
-        .pause(1)        
+        .pause(GlobalConfig.scenarioPauses)        
     );
 
     public static ChainBuilder beginTest = exec(
         exec(http("Assesment Subsection - Phonemes - Begin test - Request 1")
             .get("/api/assessment/all?phaseId=1&categoryId=1"))
-        .pause(1)
+        .pause(GlobalConfig.scenarioPauses)
         .exec(http("Assesment Subsection - Phonemes - Begin test - Request 2")
             .get("/api/comments/by-phase?pupilId=#{pupilId}&phaseId=1"))
-        .pause(1)
+        .pause(GlobalConfig.scenarioPauses)
     );
 
     public static ChainBuilder performTest = exec(
@@ -59,7 +61,7 @@ public class Phonemes {
         .exec(session ->
                 { Session nn = session.set("questionId", session.getInt("questionId") + 1);
                 return nn; })//Because questionId = 2 does NOT exist
-        .pause(1)
+        .pause(GlobalConfig.scenarioPauses)
         .repeat(22)
         .on(
             exec(session ->
@@ -69,14 +71,14 @@ public class Phonemes {
                 .post("/api/assessment/correct")
                     .header("content-type", "application/json")
                     .body(ElFileBody("user-files\\simulations\\bodies\\Phonemes\\CorrectAnswer.json")))
-            .pause(1)
+            .pause(GlobalConfig.scenarioPauses)
         )
     );
 
     public static ChainBuilder endTest = exec(
         exec(http("Assesment Subsection - Phonemes - End test - Request 1")
             .get("/api/assessment/has-paused-assessment?pupilId=#{pupilId}&phaseId=1&categoryId=1&testFormat=all"))
-        .pause(1)
+        .pause(GlobalConfig.scenarioPauses)
     );
 
     public static ChainBuilder feedPupilIds = exec(
