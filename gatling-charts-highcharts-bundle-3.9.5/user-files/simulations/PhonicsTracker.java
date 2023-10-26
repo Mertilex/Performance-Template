@@ -5,7 +5,8 @@ import simulations.Pages.Assesment.Blending;
 import simulations.Pages.Assesment.Segmenting;
 import simulations.Pages.Assesment.ScreeningCheck;
 import simulations.Pages.Assesment.LetterNames;
-import simulations.HttpDefaults;
+
+import simulations.FrameworkCore.HttpDefaults;
 
 import java.time.Duration;
 import java.util.*;

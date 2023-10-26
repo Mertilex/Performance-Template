@@ -1,4 +1,4 @@
-package simulations;
+package simulations.FrameworkCore;
 
 import java.time.Duration;
 import java.util.*;
