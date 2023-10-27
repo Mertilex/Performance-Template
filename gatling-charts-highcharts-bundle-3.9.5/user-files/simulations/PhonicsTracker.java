@@ -5,7 +5,7 @@ import simulations.Pages.Assesment.Blending;
 import simulations.Pages.Assesment.Segmenting;
 import simulations.Pages.Assesment.ScreeningCheck;
 import simulations.Pages.Assesment.LetterNames;
-
+import simulations.Feeders.AccessTokensFeeder;
 import simulations.FrameworkCore.HttpDefaults;
 
 import java.time.Duration;
@@ -23,19 +23,19 @@ public class PhonicsTracker extends Simulation
 {
     ScenarioBuilder assesment_OpenAllPages = scenario("Assesment - Open all Pages")
         .exec(
-            HttpDefaults.feedAccessTokens    
+            AccessTokensFeeder.feedAccessTokens    
             ,PhonemesPhase1.openPhonemes_Phase_1
-            ,Phonemes.openPhonemes
-            ,HighFrequencyWords.openHighFrequencyWords
-            ,Blending.openBlending
-            ,Segmenting.openSegmenting
-            ,ScreeningCheck.openScreeningCheck
-            ,LetterNames.openLetterNames
+            // ,Phonemes.openPhonemes
+            // ,HighFrequencyWords.openHighFrequencyWords
+            // ,Blending.openBlending
+            // ,Segmenting.openSegmenting
+            // ,ScreeningCheck.openScreeningCheck
+            // ,LetterNames.openLetterNames
         );
     
     ScenarioBuilder assesmentPage_Phonemes_PerformTest = scenario("Assesment Page - Phonemes - Perform Test")
         .exec(
-            HttpDefaults.feedAccessTokens
+            AccessTokensFeeder.feedAccessTokens
             ,Phonemes.feedPupilIds
             ,Phonemes.openPhonemes
             ,Phonemes.prepareTest
@@ -46,8 +46,8 @@ public class PhonicsTracker extends Simulation
 
     {
         setUp(
-            assesmentPage_Phonemes_PerformTest.injectOpen(
-               atOnceUsers(1)),
+            // assesmentPage_Phonemes_PerformTest.injectOpen(
+            //     atOnceUsers(1)),
             assesment_OpenAllPages.injectOpen(
                 atOnceUsers(1))
                 // rampUsers(500).during(60))

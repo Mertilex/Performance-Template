@@ -11,7 +11,7 @@ import static io.gatling.javaapi.jdbc.JdbcDsl.*;
 public class DbFeeder extends Simulation {
     private static String dbConnectionString = "jdbc:sqlserver://localhost;Database=PhonicsTrackerAzure_Test;Trusted_Connection=True;MultipleActiveResultSets=true;Encrypt=false";
     private static String dbLogin = "QSuser";
-    private static String dbPassword = "QSuser";
+    private static String dbPassword = "QSuser"; //TODO: extract it to GlobalConfig
 
     private static FeederBuilder fetchData(String sql) {
         return jdbcFeeder(

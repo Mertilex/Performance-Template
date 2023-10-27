@@ -14,13 +14,6 @@ import static io.gatling.javaapi.http.HttpDsl.*;
 import static io.gatling.javaapi.jdbc.JdbcDsl.*;
 
 public class HttpDefaults {
-
-    private static FeederBuilder<String> feeder = csv("accessTokens.csv").random();
-
-    public static ChainBuilder feedAccessTokens = exec(
-        feed(feeder)
-    ); 
-
     public static HttpProtocolBuilder httpProtocol = http
         .baseUrl(GlobalConfig.appUrl)
         .inferHtmlResources(
