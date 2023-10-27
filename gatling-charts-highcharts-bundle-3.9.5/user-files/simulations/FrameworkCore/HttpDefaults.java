@@ -1,5 +1,7 @@
 package simulations.FrameworkCore;
 
+import simulations.Configs.GlobalConfig;
+
 import java.time.Duration;
 import java.util.*;
 
@@ -20,7 +22,7 @@ public class HttpDefaults extends Simulation {
     ); 
 
     public static HttpProtocolBuilder httpProtocol = http
-        .baseUrl("https://localhost:44317")
+        .baseUrl(GlobalConfig.appUrl)
         .inferHtmlResources(
             AllowList(),
             DenyList(".*\\.js", ".*\\.css", ".*\\.gif", ".*\\.jpeg", ".*\\.jpg", ".*\\.ico", ".*\\.woff", ".*\\.woff2", ".*\\.(t|o)tf", ".*\\.png", ".*\\.svg", ".*detectportal\\.firefox\\.com.*"))
@@ -31,8 +33,8 @@ public class HttpDefaults extends Simulation {
         .upgradeInsecureRequestsHeader("1")
         .userAgentHeader("Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/115.0");
 
-//   public static HttpProtocolBuilder baseGet(String url) = http //httpProtocol
-//     .get(url)
-//     .authorizationHeader("Bearer #{accessToken}");
+        //   public static HttpProtocolBuilder baseGet(String url) = http //httpProtocol
+        //     .get(url)
+        //     .authorizationHeader("Bearer #{accessToken}");
 
 }
