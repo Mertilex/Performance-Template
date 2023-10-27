@@ -24,13 +24,13 @@ public class PhonicsTracker extends Simulation
     ScenarioBuilder assesment_OpenAllPages = scenario("Assesment - Open all Pages")
         .exec(
             HttpDefaults.feedAccessTokens    
-            // ,PhonemesPhase1.openPhonemes_Phase_1
+            ,PhonemesPhase1.openPhonemes_Phase_1
             ,Phonemes.openPhonemes
-            // ,HighFrequencyWords.openHighFrequencyWords
-            // ,Blending.openBlending
-            // ,Segmenting.openSegmenting
-            // ,ScreeningCheck.openScreeningCheck
-            // ,LetterNames.openLetterNames
+            ,HighFrequencyWords.openHighFrequencyWords
+            ,Blending.openBlending
+            ,Segmenting.openSegmenting
+            ,ScreeningCheck.openScreeningCheck
+            ,LetterNames.openLetterNames
         );
     
     ScenarioBuilder assesmentPage_Phonemes_PerformTest = scenario("Assesment Page - Phonemes - Perform Test")
@@ -46,8 +46,8 @@ public class PhonicsTracker extends Simulation
 
     {
         setUp(
-            //assesmentPage_Phonemes_PerformTest.injectOpen(
-              //  atOnceUsers(1)),
+            assesmentPage_Phonemes_PerformTest.injectOpen(
+               atOnceUsers(1)),
             assesment_OpenAllPages.injectOpen(
                 atOnceUsers(1))
                 // rampUsers(500).during(60))

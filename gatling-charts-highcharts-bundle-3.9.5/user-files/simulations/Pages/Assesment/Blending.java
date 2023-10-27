@@ -14,8 +14,7 @@ import static io.gatling.javaapi.jdbc.JdbcDsl.*;
 public class Blending {
     public static ChainBuilder openBlending = exec(
         group("Blending - Open blending").on(
-            exec(http("Assesment Subsection - Blending - Request 1")
-                .get("/api/lookup/phase/4"))
+            exec(baseGet("/api/lookup/phase/4"))
             .pause(GlobalConfig.scenarioPauses)
         )
     ); 

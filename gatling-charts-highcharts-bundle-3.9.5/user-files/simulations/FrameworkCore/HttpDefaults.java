@@ -36,7 +36,14 @@ public class HttpDefaults {
     {
         return http(url)
                 .get(url)
-                .header("Authorization", "Bearer #{accessToken}")
-            ;
+                .header("Authorization", "Bearer #{accessToken}");
+    };
+
+    public static HttpRequestActionBuilder basePost(String url)
+    {
+        return http(url)
+                .post(url)
+                .header("content-type", "application/json")
+                .header("Authorization", "Bearer #{accessToken}");
     };
 }

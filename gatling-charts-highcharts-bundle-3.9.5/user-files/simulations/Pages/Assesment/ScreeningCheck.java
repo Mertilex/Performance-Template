@@ -14,8 +14,7 @@ import static io.gatling.javaapi.jdbc.JdbcDsl.*;
 public class ScreeningCheck {
     public static ChainBuilder openScreeningCheck = exec(
         group("ScreeningCheck - Open screening check").on(
-            exec(http("Assesment Subsection - Screening Check - Request 1")
-                .get("/api/lookup/phase/3"))
+            exec(baseGet("/api/lookup/phase/3"))
             .pause(GlobalConfig.scenarioPauses)
         )
     );

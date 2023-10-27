@@ -3,6 +3,7 @@ package simulations.Pages.Assesment;
 import simulations.Configs.GlobalConfig;
 import simulations.Feeders.DbFeeder;
 import static simulations.FrameworkCore.HttpDefaults.baseGet;
+import static simulations.FrameworkCore.HttpDefaults.basePost;
 
 import io.gatling.javaapi.core.*;
 import io.gatling.javaapi.http.*;
@@ -52,10 +53,8 @@ public class Phonemes {
         group("Phonemes - Perform test").on(
             exec(session ->
                     session.set("questionId", "1"))
-            .exec(http("Assesment Subsection - Phonemes - Perform test - Request 1")
-                .post("/api/assessment/correct")
-                    .header("content-type", "application/json")
-                    .body(ElFileBody("user-files\\simulations\\bodies\\Phonemes\\CorrectAnswer.json")))
+            .exec(basePost("/api/assessment/correct")
+                .body(ElFileBody("user-files\\simulations\\bodies\\Phonemes\\CorrectAnswer.json")))
             .exec(session ->
                     { Session nn = session.set("questionId", session.getInt("questionId") + 1);
                     return nn; })//Because questionId = 2 does NOT exist
@@ -65,10 +64,8 @@ public class Phonemes {
                 exec(session ->
                     { Session nn = session.set("questionId", session.getInt("questionId") + 1);
                     return nn; })
-                .exec(http("Assesment Subsection - Phonemes - Perform test - Request 1") //#{questionId}")
-                    .post("/api/assessment/correct")
-                        .header("content-type", "application/json")
-                        .body(ElFileBody("user-files\\simulations\\bodies\\Phonemes\\CorrectAnswer.json")))
+                .exec(basePost("/api/assessment/correct")
+                    .body(ElFileBody("user-files\\simulations\\bodies\\Phonemes\\CorrectAnswer.json")))
                 .pause(GlobalConfig.scenarioPauses)
             )
         )
