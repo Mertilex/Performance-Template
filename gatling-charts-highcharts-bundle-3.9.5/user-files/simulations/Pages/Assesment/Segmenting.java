@@ -1,6 +1,7 @@
 package simulations.Pages.Assesment;
 
 import simulations.Configs.GlobalConfig;
+import static simulations.FrameworkCore.HttpDefaults.baseGet;
 
 import io.gatling.javaapi.core.*;
 import io.gatling.javaapi.http.*;
@@ -12,18 +13,16 @@ import static io.gatling.javaapi.jdbc.JdbcDsl.*;
 
 public class Segmenting {
     public static ChainBuilder openSegmenting = exec(
-        exec(http("Assesment Subsection - Segmenting - Request 1")
-            .get("/api/lookup/all-entries/false"))
-        .pause(GlobalConfig.scenarioPauses)
-        .exec(http("Assesment Subsection - Segmenting - Request 2")
-            .get("/api/lookup/all-sets"))
-        .pause(GlobalConfig.scenarioPauses)
-         .exec(http("Assesment Subsection - Segmenting - Request 3")
-            .get("/api/lookup/terms"))
-        .pause(GlobalConfig.scenarioPauses)
-        .exec(http("Assesment Subsection - Segmenting - Request 4")
-            .get("/api/lookup/phase/5"))
-        .pause(GlobalConfig.scenarioPauses)
+        group("Segmenting - Open segmenting").on(
+            exec(baseGet("/api/lookup/all-entries/false"))
+            .pause(GlobalConfig.scenarioPauses)
+            .exec(baseGet("/api/lookup/all-sets"))
+            .pause(GlobalConfig.scenarioPauses)
+            .exec(baseGet("/api/lookup/terms"))
+            .pause(GlobalConfig.scenarioPauses)
+            .exec(baseGet("/api/lookup/phase/5"))
+            .pause(GlobalConfig.scenarioPauses)
+        )
     );
 }
 

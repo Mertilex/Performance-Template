@@ -1,6 +1,7 @@
 package simulations.Pages.Assesment;
 
 import simulations.Configs.GlobalConfig;
+import static simulations.FrameworkCore.HttpDefaults.baseGet;
 
 import io.gatling.javaapi.core.*;
 import io.gatling.javaapi.http.*;
@@ -12,6 +13,7 @@ import static io.gatling.javaapi.jdbc.JdbcDsl.*;
 
 public class HighFrequencyWords {
     public static ChainBuilder openHighFrequencyWords = exec(
+        group("HighFrequencyWords - Open high frequency words").on(
             exec(http("Assesment Subsection - High Frequency Words - Request 1")
                 .get("/api/lookup/all-entries/false"))
             .pause(GlobalConfig.scenarioPauses)
@@ -24,6 +26,7 @@ public class HighFrequencyWords {
             .exec(http("Assesment Subsection - High Frequency Words - Request 4")
                 .get("/api/lookup/phase/2"))
             .pause(GlobalConfig.scenarioPauses)
-        );
+        )
+    );
 }
 

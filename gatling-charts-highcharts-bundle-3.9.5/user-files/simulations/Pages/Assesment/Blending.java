@@ -1,6 +1,7 @@
 package simulations.Pages.Assesment;
 
 import simulations.Configs.GlobalConfig;
+import static simulations.FrameworkCore.HttpDefaults.baseGet;
 
 import io.gatling.javaapi.core.*;
 import io.gatling.javaapi.http.*;
@@ -12,9 +13,11 @@ import static io.gatling.javaapi.jdbc.JdbcDsl.*;
 
 public class Blending {
     public static ChainBuilder openBlending = exec(
-        exec(http("Assesment Subsection - Blending - Request 1")
-            .get("/api/lookup/phase/4"))
-        .pause(GlobalConfig.scenarioPauses)
+        group("Blending - Open blending").on(
+            exec(http("Assesment Subsection - Blending - Request 1")
+                .get("/api/lookup/phase/4"))
+            .pause(GlobalConfig.scenarioPauses)
+        )
     ); 
 }
 

@@ -1,6 +1,7 @@
 package simulations.Pages.Assesment;
 
 import simulations.Configs.GlobalConfig;
+import static simulations.FrameworkCore.HttpDefaults.baseGet;
 
 import io.gatling.javaapi.core.*;
 import io.gatling.javaapi.http.*;
@@ -12,9 +13,10 @@ import static io.gatling.javaapi.jdbc.JdbcDsl.*;
 
 public class LetterNames {
     public static ChainBuilder openLetterNames = exec(
-            exec(http("Assesment Subsection - Letter Names - Request 1")
-                .get("/api/lookup/phase/8")
+        group("LetterNames - Open letter names").on(
+            exec(baseGet("/api/lookup/phase/8")
                 .check(status().is(200)))
-            .pause(GlobalConfig.scenarioPauses)   
-        );
+            .pause(GlobalConfig.scenarioPauses)
+        )
+    );
 }
