@@ -46,8 +46,7 @@ public class ComputerDatabaseSimulation extends Simulation {
         // Note how we force the counter name, so we can reuse it
         repeat(4, "i").on(
             exec(
-                http("Page #{i}")
-                    .get("/computers?p=#{i}")
+                HttpDefaults.baseGet("/computers?p=#{i}") //Page #{i}
             ).pause(GlobalConfig.scenarioPauses)
         );
 
@@ -59,9 +58,7 @@ public class ComputerDatabaseSimulation extends Simulation {
         tryMax(2)
             .on(
                 exec(
-                    http("Form")
-                        .get("/computers/new")
-                )
+                    HttpDefaults.baseGet("/computers/new")) //Form
                     .pause(GlobalConfig.scenarioPauses)
                     .exec(
                         http("Post")
