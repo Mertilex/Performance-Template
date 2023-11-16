@@ -23,10 +23,10 @@ public class DbFeeder {
     }
     
     public static ChainBuilder feedPupilIds = exec(
-         feed(
+        feed(
             fetchData("SELECT p.Id AS pupilId \r\n" + //
-                        "FROM dbo.Pupil AS p\r\n" + //
-                        "WHERE p.Active = 1\r\n" + //
-                        "AND p.EntryId = 18534"))
+                    "FROM dbo.Pupil AS p\r\n" + //
+                    "WHERE p.Active = 1\r\n" + //
+                    "AND p.EntryId = 18534"))
     );
 }

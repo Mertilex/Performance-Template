@@ -1,6 +1,8 @@
 package computerdatabase;
 
 import simulations.Configs.GlobalConfig;
+import simulations.FrameworkCore.HttpDefaults;
+import simulations.Feeders.CsvFeeder;
 
 import static io.gatling.javaapi.core.CoreDsl.*;
 import static io.gatling.javaapi.http.HttpDsl.*;
@@ -18,37 +20,26 @@ import java.util.concurrent.ThreadLocalRandom;
  * </ul>
  */
 public class ComputerDatabaseSimulation extends Simulation {
-
-    HttpProtocolBuilder httpProtocol =
-        http.baseUrl("https://computer-database.gatling.io")
-            .acceptHeader("text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8")
-            .acceptLanguageHeader("en-US,en;q=0.5")
-            .acceptEncodingHeader("gzip, deflate")
-            .userAgentHeader(
-                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36 Edg/114.0.1823.82"    
-            //"Mozilla/5.0 (Macintosh; Intel Mac OS X 10.8; rv:16.0) Gecko/20100101 Firefox/16.0"
-            );
-
-    FeederBuilder<String> feeder = csv("search.csv").random();
+    // FeederBuilder<String> feeder = csv("search.csv").random();
 
     ChainBuilder search =
-    exec(http("Home").get("/"))
-    .pause(GlobalConfig.scenarioPauses)
-            .feed(feeder)
-            .exec(
-                http("Search")
-                    .get("/computers?f=#{searchCriterion}")
-                    .check(
-                        css("a:contains('#{searchComputerName}')", "href").saveAs("computerUrl")
-                    )
-            )
-            .pause(GlobalConfig.scenarioPauses)
-            .exec(
-                http("Select")
-                    .get("#{computerUrl}")
-                    .check(status().is(200))
-            )
-            .pause(GlobalConfig.scenarioPauses);
+        exec(http("Home").get("/"))
+        .pause(GlobalConfig.scenarioPauses)
+        .exec(CsvFeeder.feedSearchCriteria)//.feed(feeder)
+        .exec(
+            http("Search")
+                .get("/computers?f=#{searchCriterion}")
+                .check(
+                    css("a:contains('#{searchComputerName}')", "href").saveAs("computerUrl")
+                )
+        )
+        .pause(GlobalConfig.scenarioPauses)
+        .exec(
+            http("Select")
+                .get("#{computerUrl}")
+                .check(status().is(200))
+        )
+        .pause(GlobalConfig.scenarioPauses);
 
     // Repeat is a loop resolved at RUNTIME
     ChainBuilder browse =
@@ -92,13 +83,21 @@ public class ComputerDatabaseSimulation extends Simulation {
             // If the chain didn't finally succeed, have the user exit the whole scenario
             .exitHereIfFailed();
 
-    ScenarioBuilder users = scenario("Users").exec(search, browse);
-    ScenarioBuilder admins = scenario("Admins").exec(search, browse, edit);
+    ScenarioBuilder users = scenario("Users").exec(
+        search
+        ,browse
+    );
+
+    ScenarioBuilder admins = scenario("Admins").exec(
+        search
+        ,browse
+        ,edit
+    );
 
     {
         setUp(
-            users.injectOpen(rampUsers(10).during(10)),
-            admins.injectOpen(rampUsers(2).during(10))
-        ).protocols(httpProtocol);
+            users.injectOpen(atOnceUsers(1))//rampUsers(10).during(10)),
+            ,admins.injectOpen(atOnceUsers(1))//rampUsers(2).during(10))
+        ).protocols(HttpDefaults.httpProtocol);
     }
 }
