@@ -47,9 +47,11 @@ public class PhonicsTracker extends Simulation
     {
         setUp(
             assesmentPage_Phonemes_PerformTest.injectOpen(
-                atOnceUsers(1)),
+                rampUsers(300).during(90)),
+                //atOnceUsers(300)),
             assesment_OpenAllPages.injectOpen(
-                atOnceUsers(1))
+                rampUsers(300).during(90))
+                // atOnceUsers(1))
                 // rampUsers(500).during(60))
         ).protocols(HttpDefaults.httpProtocol);
     }
