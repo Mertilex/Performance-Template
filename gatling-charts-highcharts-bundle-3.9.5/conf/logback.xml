@@ -10,13 +10,23 @@
 
 	<!-- uncomment and set to DEBUG to log all failing HTTP requests -->
 	<!-- uncomment and set to TRACE to log all HTTP requests -->
-	<!--<logger name="io.gatling.http.engine.response" level="TRACE" />-->
+	<logger name="io.gatling.http.engine.response" level="DEBUG" />
 
 	<!-- uncomment to log WebSocket events -->
     <!--<logger name="io.gatling.http.action.ws.fsm" level="DEBUG" />-->
 
 	<!-- uncomment to log SSE events -->
-    <!--<logger name="io.gatling.http.action.sse.fsm" level="DEBUG" />-->
+    <!-- <logger name="io.gatling.http.action.sse.fsm" level="DEBUG" /> -->
+
+	<timestamp key="bySecond" datePattern="yyyyMMdd'T'HHmmss"/>
+
+	<appender name="FILE" class="ch.qos.logback.core.FileAppender">
+		<encoder>
+			<pattern>%d{HH:mm:ss.SSS} [%-5level] %logger{15} - %msg%n%rEx</pattern>
+			<immediateFlush>false</immediateFlush>
+		</encoder>
+		<file>results\logs\gatling-${bySecond}.log</file>
+	</appender>
 
 	<root level="WARN">
 		<appender-ref ref="CONSOLE" />

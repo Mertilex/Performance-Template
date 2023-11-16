@@ -1,0 +1,5 @@
+{
+    "questionId": #{questionId},
+    "pupilId": #{pupilId},
+    "termId": null
+}
