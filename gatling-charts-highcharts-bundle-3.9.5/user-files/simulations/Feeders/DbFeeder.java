@@ -9,7 +9,7 @@ import static io.gatling.javaapi.core.CoreDsl.*;
 import static io.gatling.javaapi.http.HttpDsl.*;
 import static io.gatling.javaapi.jdbc.JdbcDsl.*;
 
-public class DbFeeder { //extends Simulation { //TODO: it has to be?
+public class DbFeeder {
     private static String dbConnectionString = GlobalConfig.dbConnectionString;
     private static String dbLogin = GlobalConfig.dbLogin;
     private static String dbPassword = GlobalConfig.dbPassword;

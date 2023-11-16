@@ -25,10 +25,23 @@ public class HttpDefaults {
         .upgradeInsecureRequestsHeader("1")
         .userAgentHeader("Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/115.0");
     
+    private static Map<CharSequence, String> headersNoCache = Map.ofEntries(
+        Map.entry("Cache-Control", "no-cache"),
+        Map.entry("DNT", "1"),
+        Map.entry("Pragma", "no-cache"));
+
     public static HttpRequestActionBuilder baseGet(String url)
     {
         return http(url)
                 .get(url)
+                .header("Authorization", "Bearer #{accessToken}");
+    };
+
+    public static HttpRequestActionBuilder baseGetWithNoCache(String url)
+    {
+        return http(url)
+                .get(url)
+                .headers(headersNoCache)
                 .header("Authorization", "Bearer #{accessToken}");
     };
 
