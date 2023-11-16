@@ -2,6 +2,7 @@ package computerdatabase;
 
 import simulations.Configs.GlobalConfig;
 import simulations.FrameworkCore.HttpDefaults;
+import simulations.Feeders.AccessTokensFeeder;
 import simulations.Feeders.CsvFeeder;
 
 import static io.gatling.javaapi.core.CoreDsl.*;
@@ -23,21 +24,20 @@ public class ComputerDatabaseSimulation extends Simulation {
     // FeederBuilder<String> feeder = csv("search.csv").random();
 
     ChainBuilder search =
-        exec(http("Home").get("/"))
+        exec(AccessTokensFeeder.feedAccessTokens)
+        .exec(CsvFeeder.feedSearchCriteria)
+        .exec(HttpDefaults.baseGet("/")) //Home
         .pause(GlobalConfig.scenarioPauses)
-        .exec(CsvFeeder.feedSearchCriteria)//.feed(feeder)
         .exec(
-            http("Search")
-                .get("/computers?f=#{searchCriterion}")
-                .check(
-                    css("a:contains('#{searchComputerName}')", "href").saveAs("computerUrl")
-                )
+            HttpDefaults.baseGet("/computers?f=#{searchCriterion}")
+            .check(
+                css("a:contains('#{searchComputerName}')", "href")
+                .saveAs("computerUrl"))
         )
         .pause(GlobalConfig.scenarioPauses)
         .exec(
-            http("Select")
-                .get("#{computerUrl}")
-                .check(status().is(200))
+            HttpDefaults.baseGet("#{computerUrl}")
+            .check(status().is(200))
         )
         .pause(GlobalConfig.scenarioPauses);
 
