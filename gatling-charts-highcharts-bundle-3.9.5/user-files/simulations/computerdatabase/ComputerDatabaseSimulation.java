@@ -21,9 +21,8 @@ import java.util.concurrent.ThreadLocalRandom;
  * </ul>
  */
 public class ComputerDatabaseSimulation extends Simulation {
-    // FeederBuilder<String> feeder = csv("search.csv").random();
 
-    ChainBuilder search =
+    ChainBuilder searchForComputer =
         exec(AccessTokensFeeder.feedAccessTokens)
         .exec(CsvFeeder.feedSearchCriteria)
         .exec(HttpDefaults.baseGet("/")) //Home
@@ -41,20 +40,14 @@ public class ComputerDatabaseSimulation extends Simulation {
         )
         .pause(GlobalConfig.scenarioPauses);
 
-    // Repeat is a loop resolved at RUNTIME
-    ChainBuilder browse =
-        // Note how we force the counter name, so we can reuse it
+    ChainBuilder browseForComputer =
         repeat(4, "i").on(
             exec(
                 HttpDefaults.baseGet("/computers?p=#{i}") //Page #{i}
             ).pause(GlobalConfig.scenarioPauses)
         );
 
-    // Note we should be using a feeder here
-    // Let's demonstrate how we can retry: let's make the request fail randomly and retry a given
-    // number of times
-    ChainBuilder edit =
-        // Let's try at max 2 times
+    ChainBuilder editComputerWithRandomFailure =
         tryMax(2)
             .on(
                 exec(
@@ -67,47 +60,30 @@ public class ComputerDatabaseSimulation extends Simulation {
                             .formParam("discontinued", "")
                             .formParam("company", "37")
                             .check(
-                                status().is(200
-                                    // We do a check on a condition that's been customized with
-                                    // a lambda. It will be evaluated every time a user executes
-                                    // the request.
-                                    //session -> 200 + ThreadLocalRandom.current().nextInt(2)
+                                status().is(
+                                    // This intentionally causes random failures to show how it refrects to the report
+                                    session -> 200 + ThreadLocalRandom.current().nextInt(2)
                                 )
                             )
-                        // http("Post")
-                        //     .post("/computers")
-                        //     .formParam("name", "Beautiful Computer")
-                        //     .formParam("introduced", "2012-05-30")
-                        //     .formParam("discontinued", "")
-                        //     .formParam("company", "37")
-                        //     .check(
-                        //         status().is(
-                        //             // We do a check on a condition that's been customized with
-                        //             // a lambda. It will be evaluated every time a user executes
-                        //             // the request.
-                        //             session -> 200 + ThreadLocalRandom.current().nextInt(2)
-                        //         )
-                        //     )
                     )
             )
-            // If the chain didn't finally succeed, have the user exit the whole scenario
             .exitHereIfFailed();
 
-    ScenarioBuilder users = scenario("Users").exec(
-        search
-        ,browse
+    ScenarioBuilder searchAndBrowseForComputer = scenario("Search and browse for computer").exec(
+        searchForComputer
+        ,browseForComputer
     );
 
-    ScenarioBuilder admins = scenario("Admins").exec(
-        search
-        ,browse
-        ,edit
+    ScenarioBuilder searchAndBrowseAndEditComputer = scenario("Search, Browse and edit Computer with random failure").exec(
+        searchForComputer
+        ,browseForComputer
+        ,editComputerWithRandomFailure
     );
 
     {
         setUp(
-            users.injectOpen(atOnceUsers(1))//rampUsers(10).during(10)),
-            ,admins.injectOpen(atOnceUsers(1))//rampUsers(2).during(10))
+            searchAndBrowseForComputer.injectOpen(atOnceUsers(1))//rampUsers(10).during(10)),
+            ,searchAndBrowseAndEditComputer.injectOpen(atOnceUsers(1))//rampUsers(2).during(10))
         ).protocols(HttpDefaults.httpProtocol);
     }
 }
