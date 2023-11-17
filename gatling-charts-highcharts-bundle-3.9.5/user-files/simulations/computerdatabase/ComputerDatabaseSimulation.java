@@ -2,6 +2,7 @@ package computerdatabase;
 
 import simulations.Configs.GlobalConfig;
 import simulations.FrameworkCore.HttpDefaults;
+import simulations.FrameworkCore.StatusCodes;
 import simulations.Feeders.AccessTokensFeeder;
 import simulations.Feeders.CsvFeeder;
 
@@ -30,7 +31,7 @@ public class ComputerDatabaseSimulation extends Simulation {
             .pause(GlobalConfig.scenarioPauses)
             .exec(
                 HttpDefaults.baseGet("#{computerUrl}")
-                .check(status().is(200))
+                .check(status().in(StatusCodes.getAcceptedStatusCodes()))
             )
             .pause(GlobalConfig.scenarioPauses)
         );
@@ -61,6 +62,7 @@ public class ComputerDatabaseSimulation extends Simulation {
                                     status().is(
                                         // This intentionally causes random failures to show how it refrects to the report
                                         session -> 200 + ThreadLocalRandom.current().nextInt(2)
+                                        //status().in(StatusCodes.getAcceptedStatusCodes())
                                     )
                                 )
                         )

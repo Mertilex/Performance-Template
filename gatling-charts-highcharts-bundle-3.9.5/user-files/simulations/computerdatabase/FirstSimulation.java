@@ -13,24 +13,25 @@ import static io.gatling.javaapi.jdbc.JdbcDsl.*;
 
 import simulations.FrameworkCore.HttpDefaults;
 import simulations.Feeders.AccessTokensFeeder;
+import simulations.FrameworkCore.StatusCodes;
 
 public class FirstSimulation extends Simulation {
     ChainBuilder homeScreen = exec(
         group("Open Specific Computer - Open Home Screen").on(
             exec(HttpDefaults.baseGetWithNoCache("/")
-                .check(status().is(200))))
+                .check(status().in(StatusCodes.getAcceptedStatusCodes()))))
     );
 
     ChainBuilder openSpecificComputer = exec(
         group("Open Specific Computer - Get Computer").on(
             exec(HttpDefaults.baseGetWithNoCache("/computers/501")
-                .check(status().is(200))))
+                .check(status().in(StatusCodes.getAcceptedStatusCodes()))))
     );
 
     ChainBuilder searchForMacbook = exec(
         group("Open Specific Computer - Search For Macbook").on(
             exec(HttpDefaults.baseGetWithNoCache("/computers?f=macbook")
-                .check(status().is(200))))
+                .check(status().in(StatusCodes.getAcceptedStatusCodes()))))
     );
 
     ScenarioBuilder openComputer = scenario("Search for computer")
