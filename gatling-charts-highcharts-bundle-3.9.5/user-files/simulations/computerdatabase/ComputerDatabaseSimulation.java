@@ -13,20 +13,13 @@ import io.gatling.javaapi.http.*;
 
 import java.util.concurrent.ThreadLocalRandom;
 
-/**
- * This sample is based on our official tutorials:
- * <ul>
- *   <li><a href="https://gatling.io/docs/gatling/tutorials/quickstart">Gatling quickstart tutorial</a>
- *   <li><a href="https://gatling.io/docs/gatling/tutorials/advanced">Gatling advanced tutorial</a>
- * </ul>
- */
 public class ComputerDatabaseSimulation extends Simulation {
 
     ChainBuilder searchForComputer =
         group("Computer Database - Search for computer").on(
             exec(AccessTokensFeeder.feedAccessTokens)
             .exec(CsvFeeder.feedSearchCriteria)
-            .exec(HttpDefaults.baseGet("/")) //Home
+            .exec(HttpDefaults.baseGet("/"))
             .pause(GlobalConfig.scenarioPauses)
             .exec(
                 HttpDefaults.baseGet("/computers?f=#{searchCriterion}")
@@ -46,7 +39,7 @@ public class ComputerDatabaseSimulation extends Simulation {
         group("Computer Database - Browse for computer").on(
             repeat(4, "i").on(
                 exec(
-                    HttpDefaults.baseGet("/computers?p=#{i}") //Page #{i}
+                    HttpDefaults.baseGet("/computers?p=#{i}")
                 ).pause(GlobalConfig.scenarioPauses)
             )
         );
@@ -56,10 +49,10 @@ public class ComputerDatabaseSimulation extends Simulation {
             tryMax(2)
                 .on(
                     exec(
-                        HttpDefaults.baseGet("/computers/new")) //Form
+                        HttpDefaults.baseGet("/computers/new"))
                         .pause(GlobalConfig.scenarioPauses)
                         .exec(
-                            HttpDefaults.basePost("/computers") //Post
+                            HttpDefaults.basePost("/computers")
                                 .formParam("name", "Beautiful Computer")
                                 .formParam("introduced", "2012-05-30")
                                 .formParam("discontinued", "")
