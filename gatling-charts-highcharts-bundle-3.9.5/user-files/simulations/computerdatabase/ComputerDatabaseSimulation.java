@@ -61,20 +61,33 @@ public class ComputerDatabaseSimulation extends Simulation {
                     HttpDefaults.baseGet("/computers/new")) //Form
                     .pause(GlobalConfig.scenarioPauses)
                     .exec(
-                        http("Post")
-                            .post("/computers")
+                        HttpDefaults.basePost("/computers") //Post
                             .formParam("name", "Beautiful Computer")
                             .formParam("introduced", "2012-05-30")
                             .formParam("discontinued", "")
                             .formParam("company", "37")
                             .check(
-                                status().is(
+                                status().is(200
                                     // We do a check on a condition that's been customized with
                                     // a lambda. It will be evaluated every time a user executes
                                     // the request.
-                                    session -> 200 + ThreadLocalRandom.current().nextInt(2)
+                                    //session -> 200 + ThreadLocalRandom.current().nextInt(2)
                                 )
                             )
+                        // http("Post")
+                        //     .post("/computers")
+                        //     .formParam("name", "Beautiful Computer")
+                        //     .formParam("introduced", "2012-05-30")
+                        //     .formParam("discontinued", "")
+                        //     .formParam("company", "37")
+                        //     .check(
+                        //         status().is(
+                        //             // We do a check on a condition that's been customized with
+                        //             // a lambda. It will be evaluated every time a user executes
+                        //             // the request.
+                        //             session -> 200 + ThreadLocalRandom.current().nextInt(2)
+                        //         )
+                        //     )
                     )
             )
             // If the chain didn't finally succeed, have the user exit the whole scenario
