@@ -30,10 +30,15 @@ public class HttpDefaults {
         Map.entry("DNT", "1"),
         Map.entry("Pragma", "no-cache"));
 
-    public static HttpRequestActionBuilder baseGet(String url)
+    public static HttpRequestActionBuilder getNoAuth(String url)
     {
         return http(url)
-                .get(url)
+                .get(url);
+    };
+    
+        public static HttpRequestActionBuilder baseGet(String url)
+    {
+        return getNoAuth(url)
                 .header("Authorization", "Bearer #{accessToken}");
     };
 
@@ -45,20 +50,21 @@ public class HttpDefaults {
                 .header("Authorization", "Bearer #{accessToken}");
     };
 
-    public static HttpRequestActionBuilder postContentJson(String url)
+    public static HttpRequestActionBuilder postNoAuth(String url)
     {
         return http(url)
-                .post(url)
-                .header("content-type", "application/json")
-                .header("Authorization", "Bearer #{accessToken}");
+                .post(url);
     };
 
     public static HttpRequestActionBuilder basePost(String url)
     {
-        return http(url)
-                .post(url)
-                // .header("content-type", "application/json")
-                .header("Authorization", "Bearer #{accessToken}")
-                ;
+        return postNoAuth(url)
+                .header("Authorization", "Bearer #{accessToken}");
+    };
+
+    public static HttpRequestActionBuilder postContentJson(String url)
+    {
+        return basePost(url)
+                .header("content-type", "application/json");
     };
 }
