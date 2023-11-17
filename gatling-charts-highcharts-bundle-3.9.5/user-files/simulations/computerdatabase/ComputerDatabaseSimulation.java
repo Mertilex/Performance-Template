@@ -23,58 +23,64 @@ import java.util.concurrent.ThreadLocalRandom;
 public class ComputerDatabaseSimulation extends Simulation {
 
     ChainBuilder searchForComputer =
-        exec(AccessTokensFeeder.feedAccessTokens)
-        .exec(CsvFeeder.feedSearchCriteria)
-        .exec(HttpDefaults.baseGet("/")) //Home
-        .pause(GlobalConfig.scenarioPauses)
-        .exec(
-            HttpDefaults.baseGet("/computers?f=#{searchCriterion}")
-            .check(
-                css("a:contains('#{searchComputerName}')", "href")
-                .saveAs("computerUrl"))
-        )
-        .pause(GlobalConfig.scenarioPauses)
-        .exec(
-            HttpDefaults.baseGet("#{computerUrl}")
-            .check(status().is(200))
-        )
-        .pause(GlobalConfig.scenarioPauses);
+        group("Computer Database - Search for computer").on(
+            exec(AccessTokensFeeder.feedAccessTokens)
+            .exec(CsvFeeder.feedSearchCriteria)
+            .exec(HttpDefaults.baseGet("/")) //Home
+            .pause(GlobalConfig.scenarioPauses)
+            .exec(
+                HttpDefaults.baseGet("/computers?f=#{searchCriterion}")
+                .check(
+                    css("a:contains('#{searchComputerName}')", "href")
+                    .saveAs("computerUrl"))
+            )
+            .pause(GlobalConfig.scenarioPauses)
+            .exec(
+                HttpDefaults.baseGet("#{computerUrl}")
+                .check(status().is(200))
+            )
+            .pause(GlobalConfig.scenarioPauses)
+        );
 
     ChainBuilder browseForComputer =
-        repeat(4, "i").on(
-            exec(
-                HttpDefaults.baseGet("/computers?p=#{i}") //Page #{i}
-            ).pause(GlobalConfig.scenarioPauses)
+        group("Computer Database - Browse for computer").on(
+            repeat(4, "i").on(
+                exec(
+                    HttpDefaults.baseGet("/computers?p=#{i}") //Page #{i}
+                ).pause(GlobalConfig.scenarioPauses)
+            )
         );
 
     ChainBuilder editComputerWithRandomFailure =
-        tryMax(2)
-            .on(
-                exec(
-                    HttpDefaults.baseGet("/computers/new")) //Form
-                    .pause(GlobalConfig.scenarioPauses)
-                    .exec(
-                        HttpDefaults.basePost("/computers") //Post
-                            .formParam("name", "Beautiful Computer")
-                            .formParam("introduced", "2012-05-30")
-                            .formParam("discontinued", "")
-                            .formParam("company", "37")
-                            .check(
-                                status().is(
-                                    // This intentionally causes random failures to show how it refrects to the report
-                                    session -> 200 + ThreadLocalRandom.current().nextInt(2)
+        group("Computer Database - Search, browse and edit Computer").on(
+            tryMax(2)
+                .on(
+                    exec(
+                        HttpDefaults.baseGet("/computers/new")) //Form
+                        .pause(GlobalConfig.scenarioPauses)
+                        .exec(
+                            HttpDefaults.basePost("/computers") //Post
+                                .formParam("name", "Beautiful Computer")
+                                .formParam("introduced", "2012-05-30")
+                                .formParam("discontinued", "")
+                                .formParam("company", "37")
+                                .check(
+                                    status().is(
+                                        // This intentionally causes random failures to show how it refrects to the report
+                                        session -> 200 + ThreadLocalRandom.current().nextInt(2)
+                                    )
                                 )
-                            )
-                    )
-            )
-            .exitHereIfFailed();
+                        )
+                )
+                .exitHereIfFailed()
+        );
 
     ScenarioBuilder searchAndBrowseForComputer = scenario("Search and browse for computer").exec(
         searchForComputer
         ,browseForComputer
     );
 
-    ScenarioBuilder searchAndBrowseAndEditComputer = scenario("Search, Browse and edit Computer with random failure").exec(
+    ScenarioBuilder searchAndBrowseAndEditComputer = scenario("Search, browse and edit Computer with random failure").exec(
         searchForComputer
         ,browseForComputer
         ,editComputerWithRandomFailure
