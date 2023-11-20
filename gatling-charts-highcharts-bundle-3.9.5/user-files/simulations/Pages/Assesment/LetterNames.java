@@ -2,6 +2,7 @@ package simulations.Pages.Assesment;
 
 import simulations.Configs.GlobalConfig;
 import static simulations.FrameworkCore.HttpDefaults.baseGet;
+import simulations.FrameworkCore.StatusCodes;
 
 import io.gatling.javaapi.core.*;
 import io.gatling.javaapi.http.*;
@@ -15,7 +16,7 @@ public class LetterNames {
     public static ChainBuilder openLetterNames = exec(
         group("LetterNames - Open letter names").on(
             exec(baseGet("/api/lookup/phase/8")
-                .check(status().is(200)))
+                .check(status().in(StatusCodes.getAcceptedStatusCodes())))
             .pause(GlobalConfig.scenarioPauses)
         )
     );

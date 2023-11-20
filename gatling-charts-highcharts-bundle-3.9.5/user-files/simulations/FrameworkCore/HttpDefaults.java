@@ -25,18 +25,46 @@ public class HttpDefaults {
         .upgradeInsecureRequestsHeader("1")
         .userAgentHeader("Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/115.0");
     
-    public static HttpRequestActionBuilder baseGet(String url)
+    private static Map<CharSequence, String> headersNoCache = Map.ofEntries(
+        Map.entry("Cache-Control", "no-cache"),
+        Map.entry("DNT", "1"),
+        Map.entry("Pragma", "no-cache"));
+
+    public static HttpRequestActionBuilder getNoAuth(String url)
+    {
+        return http(url)
+                .get(url);
+    };
+    
+        public static HttpRequestActionBuilder baseGet(String url)
+    {
+        return getNoAuth(url)
+                .header("Authorization", "Bearer #{accessToken}");
+    };
+
+    public static HttpRequestActionBuilder baseGetWithNoCache(String url)
     {
         return http(url)
                 .get(url)
+                .headers(headersNoCache)
                 .header("Authorization", "Bearer #{accessToken}");
+    };
+
+    public static HttpRequestActionBuilder postNoAuth(String url)
+    {
+        return http(url)
+                .post(url);
     };
 
     public static HttpRequestActionBuilder basePost(String url)
     {
-        return http(url)
-                .post(url)
-                .header("content-type", "application/json")
+        return postNoAuth(url)
                 .header("Authorization", "Bearer #{accessToken}");
+    };
+
+    public static HttpRequestActionBuilder postContentJson(String url)
+    {
+        return basePost(url)
+                .header("content-type", "application/json");
     };
 }

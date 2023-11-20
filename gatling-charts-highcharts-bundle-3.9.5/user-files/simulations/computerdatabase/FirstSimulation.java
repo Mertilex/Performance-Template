@@ -11,46 +11,49 @@ import static io.gatling.javaapi.core.CoreDsl.*;
 import static io.gatling.javaapi.http.HttpDsl.*;
 import static io.gatling.javaapi.jdbc.JdbcDsl.*;
 
+import simulations.FrameworkCore.HttpDefaults;
+import simulations.Feeders.AccessTokensFeeder;
+import simulations.FrameworkCore.StatusCodes;
+
 public class FirstSimulation extends Simulation {
+    ChainBuilder homeScreen = exec(
+        group("Open Specific Computer - Open Home Screen").on(
+            exec(HttpDefaults.baseGetWithNoCache("/")
+                .check(status().in(StatusCodes.getAcceptedStatusCodes()))))
+    );
 
-  private HttpProtocolBuilder httpProtocol = http
-      .baseUrl("http://computer-database.gatling.io")
-      .inferHtmlResources(AllowList(),
-          DenyList(".*\\.js", ".*\\.css", ".*\\.gif", ".*\\.jpeg", ".*\\.jpg", ".*\\.ico", ".*\\.woff", ".*\\.woff2",
-              ".*\\.(t|o)tf", ".*\\.png", ".*\\.svg", ".*detectportal\\.firefox\\.com.*"))
-      .acceptHeader("text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8")
-      .acceptEncodingHeader("gzip, deflate")
-      .acceptLanguageHeader("en-US,en;q=0.7,pl;q=0.3")
-      .upgradeInsecureRequestsHeader("1")
-      .userAgentHeader("Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/115.0");
+    ChainBuilder openSpecificComputer = exec(
+        group("Open Specific Computer - Get Computer").on(
+            exec(HttpDefaults.baseGetWithNoCache("/computers/501")
+                .check(status().in(StatusCodes.getAcceptedStatusCodes()))))
+    );
 
-  private Map<CharSequence, String> headers_1 = Map.ofEntries(
-      Map.entry("Cache-Control", "no-cache"),
-      Map.entry("DNT", "1"),
-      Map.entry("Pragma", "no-cache"));
+    ChainBuilder searchForMacbook = exec(
+        group("Open Specific Computer - Search For Macbook").on(
+            exec(HttpDefaults.baseGetWithNoCache("/computers?f=macbook")
+                .check(status().in(StatusCodes.getAcceptedStatusCodes()))))
+    );
 
-  ChainBuilder homeScreen = exec(
-      http("Home screen")
-          .get("/"));
+    ScenarioBuilder openComputer = scenario("Search for computer")
+        .exec(
+            AccessTokensFeeder.feedAccessTokens
+            ,homeScreen
+            ,openSpecificComputer
+    );
 
-  ChainBuilder openSpecificComputer = exec(
-      http("Open specific computer")
-          .get("/computers/501")
-          .headers(headers_1));
+    ScenarioBuilder searchForMacbookComputer = scenario("Search for Macbook")
+        .exec(
+            AccessTokensFeeder.feedAccessTokens
+            ,homeScreen
+            ,openSpecificComputer
+            ,searchForMacbook
+    );
 
-  ChainBuilder searchForComputer = exec(
-      http("Search for computer")
-          .get("/computers?f=macbook"));
-
-  ScenarioBuilder scenario1 = scenario("First Scenario")
-      .exec(homeScreen, openSpecificComputer);
-
-  ScenarioBuilder scenario2 = scenario("Second Scenario")
-      .exec(homeScreen, openSpecificComputer, searchForComputer);
-  {
-    setUp(
-        scenario1.injectOpen(atOnceUsers(10)),
-        scenario2.injectOpen(atOnceUsers(5)))
-        .protocols(httpProtocol);
-  }
+    {
+        setUp(
+            openComputer.injectOpen(atOnceUsers(1))
+            ,searchForMacbookComputer.injectOpen(atOnceUsers(1))
+            )
+        .protocols(HttpDefaults.httpProtocol);
+    }
 }
