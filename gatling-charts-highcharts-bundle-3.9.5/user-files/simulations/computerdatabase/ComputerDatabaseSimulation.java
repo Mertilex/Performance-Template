@@ -83,7 +83,7 @@ public class ComputerDatabaseSimulation extends Simulation {
 
     {
         setUp(
-            searchAndBrowseForComputer.injectOpen(atOnceUsers(1))//rampUsers(10).during(10)),
+            searchAndBrowseForComputer.injectOpen(atOnceUsers(10))//rampUsers(10).during(10)),
             ,searchAndBrowseAndEditComputer.injectOpen(atOnceUsers(1))//rampUsers(2).during(10))
         ).protocols(HttpDefaults.httpProtocol);
     }

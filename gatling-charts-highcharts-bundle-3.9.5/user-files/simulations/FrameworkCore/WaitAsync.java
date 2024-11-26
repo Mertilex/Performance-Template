@@ -25,6 +25,7 @@ public class WaitAsync {
             exec(http("name").get("/"))
         );
 
+        //TODO: Use below methods for all ASYNC calls.
         // return group("Wait for ASYNC call", () ->
         //         doWhileDuring(
         //                 s -> s("status").as(String.class).equals("DONE"),
@@ -41,10 +42,10 @@ public class WaitAsync {
     }
 
     // private ChainBuilder waitBasedOnDbState() {
-    //     //TODO
+    //     //TODO: Not implemented yet
     // }
 
     // private ChainBuilder waitBasedOn3rdParty() {
-    //     //TODO
+    //     //TODO: Not implemented yet
     // }
 }
