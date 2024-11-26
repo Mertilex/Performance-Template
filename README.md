@@ -11,13 +11,28 @@ This project provides a comprehensive template solution for performance, load, a
 7. To Compile and execute tests use this command: `cd /home/fp/Desktop/Perf-Template/gatling-charts-highcharts-bundle-3.9.5/bin` then `sh gatling.sh`
 8. Follow instructions displayed in terminal.
 
+![image](https://github.com/user-attachments/assets/11baea46-cc8f-49a9-b64c-65e723890419)
+
+
 
 # Key features
 ## Multiple environment support
 The solution was designed in a way that unlimited number of environments are supported. Everything that is needd to work with the solution is located in this repository. 
 Including `Lib` files that were added intentionally due too Maven issue.
 
+## Test recorder
+The solution includes a built-in Gatling Test Recorder that simplifies the creation of basic test scenarios. By capturing real user interactions, the recorder generates a skeleton test script tailored to your application's workflows. Once the recording session is closed, the recorder automatically generates properly formatted Scala code, which can be further customized to fit advanced test requirements. This feature enables quick and easy scenario creation, even for users new to performance testing.
 
+This command will run it: `sh recorder.sh`
+![image](https://github.com/user-attachments/assets/ae85bbcb-4479-4beb-8780-20a6ef05cb46)
+
+
+# Logs Configuration
+
+The solution supports multiple logging levels, offering flexibility in the amount of detail captured during test execution. Starting from DEBUG, which provides essential diagnostic information, to TRACE, which delivers the most granular details, each level offers progressively more insights into the system's behavior. This configuration ensures that you can tailor logging to suit your needs—whether for troubleshooting specific issues or conducting in-depth analysis—without overwhelming your logs with unnecessary data.
+
+It can be set in `gatling.conf` file
+![image](https://github.com/user-attachments/assets/f5213514-c5f2-489f-807c-58ed2aa91b85)
 
 
 
