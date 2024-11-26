@@ -19,7 +19,7 @@ import static io.gatling.javaapi.core.CoreDsl.*;
 import static io.gatling.javaapi.http.HttpDsl.*;
 import static io.gatling.javaapi.jdbc.JdbcDsl.*;
 
-public class PhonicsTracker extends Simulation
+public class JucyShop extends Simulation
 {
     ScenarioBuilder assesment_OpenAllPages = scenario("Assesment - Open all Pages")
         .exec(

@@ -23,7 +23,7 @@ public class PhonemesPhase1 {
             .exec(baseGet("/api/lookup/phase/10"))
             .pause(GlobalConfig.scenarioPauses)
             .exec(baseGet("/api/lookup/terms"))
-            .pause(2) //TODO: Magic number, why 2?
+            .pause(2) //TODO: GlobalConfig.scenarioPauses
         )
     );    
 }
