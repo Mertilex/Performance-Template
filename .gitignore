@@ -2,3 +2,4 @@
 /gatling-charts-highcharts-bundle-3.9.5/target/
 /.idea/
 /.vscode/
+*gatling*.log
