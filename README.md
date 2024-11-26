@@ -27,12 +27,37 @@ This command will run it: `sh recorder.sh`
 ![image](https://github.com/user-attachments/assets/ae85bbcb-4479-4beb-8780-20a6ef05cb46)
 
 
+# Concurrent Users Support
+
+Solution supports the simulation of any number of parallel or concurrent users, allowing you to test the scalability and performance of your application under various load conditions. The solution offers advanced configuration options, enabling precise control over user behavior. For example, users can start simultaneously to simulate peak load scenarios or start sequentially to mimic gradual traffic increases. This flexibility ensures you can design test scenarios that closely reflect real-world usage patterns, providing valuable insights into your system’s resilience and capacity.
+
+![image](https://github.com/user-attachments/assets/c730fa40-c7ad-430f-8894-b6ca11f4bf55)
+
+
+
 # Logs Configuration
 
 The solution supports multiple logging levels, offering flexibility in the amount of detail captured during test execution. Starting from DEBUG, which provides essential diagnostic information, to TRACE, which delivers the most granular details, each level offers progressively more insights into the system's behavior. This configuration ensures that you can tailor logging to suit your needs—whether for troubleshooting specific issues or conducting in-depth analysis—without overwhelming your logs with unnecessary data.
 
 It can be set in `gatling.conf` file
 ![image](https://github.com/user-attachments/assets/f5213514-c5f2-489f-807c-58ed2aa91b85)
+
+
+# Test Report
+
+After each test execution, Gatling generates an interactive HTML report that presents the data collected during the testing session. The report features a user-friendly interface with grouped information, making it easy to navigate through key metrics such as response times, throughput, and error rates. Additionally, the report includes insightful conclusions based on the collected data, helping you quickly identify performance bottlenecks and areas for improvement. This comprehensive reporting ensures a clear and actionable overview of your system's performance.
+
+![image](https://github.com/user-attachments/assets/2cdc5add-4e51-4cf0-9f7d-4363ec69d17b)
+
+![image](https://github.com/user-attachments/assets/3a05aea5-5adb-4871-ba5c-d6ef5607ab0a)
+
+![image](https://github.com/user-attachments/assets/0b902a3b-fd2d-45bf-832c-befed6606b7f)
+
+
+# Authentication Support
+
+Solution provides robust support for various authentication methods, enabling seamless testing of secured APIs and applications. This includes the use of Bearer Tokens, which are widely used in modern authentication flows, as well as other methods like Basic Authentication and OAuth. The flexibility of Gatling's configuration allows you to integrate authentication seamlessly into your test scenarios, ensuring accurate simulation of real-world user interactions with secured systems.
+
 
 
 
